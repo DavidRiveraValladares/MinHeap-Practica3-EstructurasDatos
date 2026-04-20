@@ -1,30 +1,28 @@
 Aplicacion de los monticulos minimos al algoritmo de Dijkstra
 
-El algoritmo de Dijkstra es un algoritmo clasico de busqueda de caminos en grafos con
-pesos no negativos. Su objetivo es encontrar la ruta de menor costo desde un nodo origen
-hacia todos los demas nodos del grafo.
+Cuando uno piensa en como una aplicacion de mapas encuentra la ruta mas corta entre dos
+puntos, detras de eso hay algoritmos que resuelven exactamente ese problema. Uno de los
+mas conocidos es el algoritmo de Dijkstra, que dado un grafo con pesos en sus aristas,
+encuentra el camino de menor costo desde un nodo origen hacia todos los demas.
 
-Para funcionar de manera eficiente, Dijkstra necesita siempre procesar el nodo no visitado
-con la menor distancia acumulada conocida hasta el momento. Este es exactamente el
-problema que resuelve un monticulo minimo: mantener una coleccion de elementos de manera
-que el de menor valor siempre sea accesible de forma rapida.
+La logica del algoritmo es bastante intuitiva: en cada paso, se escoge el nodo no visitado
+que tenga la menor distancia acumulada desde el origen, se marca como visitado, y se
+actualizan las distancias de sus vecinos si se encontro una ruta mas corta para llegar a ellos.
+Esto se repite hasta procesar todos los nodos.
 
-Durante la ejecucion del algoritmo, cada nodo del grafo se almacena en el monticulo junto
-con su distancia acumulada desde el origen. En cada iteracion se extrae el elemento minimo
-del monticulo (operacion eliminarMin), que corresponde al nodo mas cercano aun no
-procesado. Luego se revisan los vecinos de ese nodo: si se encuentra una ruta mas corta
-hacia alguno de ellos, se actualiza su distancia y se vuelve a insertar en el monticulo con el
-nuevo valor. Este proceso se repite hasta que todos los nodos han sido procesados o el
-monticulo queda vacio.
+El detalle esta en ese "se escoge el nodo de menor distancia". Si lo hacemos revisando uno
+por uno todos los nodos pendientes, el costo de esa operacion es O(n) por cada iteracion, lo
+que lleva el algoritmo completo a O(n^2). Para grafos pequenos eso no es problema, pero en
+grafos grandes esa diferencia se siente.
 
-Sin el uso de un monticulo, encontrar el nodo de menor distancia en cada paso requeriria
-recorrer todos los nodos no visitados, lo que implica un costo de O(n) por iteracion y un costo
-total de O(n^2) para el algoritmo completo. Al utilizar un monticulo minimo, la extraccion del
-minimo toma O(log n) y la insercion tambien O(log n), lo que reduce la complejidad total del
-algoritmo a O((n + m) log n), donde m es el numero de aristas del grafo. Esta mejora es
-especialmente significativa en grafos grandes y dispersos.
+Ahi es donde entra el monticulo minimo. En lugar de buscar manualmente el minimo en cada
+paso, simplemente se insertan los nodos con su distancia actual en el monticulo. Como la raiz
+siempre tiene el elemento menor, extraer el nodo mas cercano es una operacion de O(log n).
+Cuando se actualiza la distancia de un vecino, se vuelve a insertar en el monticulo con el
+nuevo valor. Con esto, la complejidad total del algoritmo baja a O((n + m) log n), donde m es
+el numero de aristas.
 
-En resumen, el monticulo minimo es una estructura clave para la implementacion eficiente del
-algoritmo de Dijkstra, ya que permite seleccionar rapidamente el siguiente nodo a procesar y
-actualizar distancias de manera ordenada, reduciendo considerablemente el tiempo de
-ejecucion del algoritmo.
+En la practica, esto significa que el monticulo minimo no es solo un detalle de implementacion,
+sino lo que hace que Dijkstra sea realmente util en escenarios del mundo real, como redes de
+transporte, telecomunicaciones o videojuegos, donde los grafos pueden tener miles o millones
+de nodos.
